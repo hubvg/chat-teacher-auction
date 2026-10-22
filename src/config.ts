@@ -31,7 +31,7 @@ export const config: AuctionConfig = {
   // Until both dates are set, the site says "Dates coming soon" and no bids count.
   // Format: 2026-10-30T15:00:00-04:00 (that's Oct 30 at 3 p.m. Eastern daylight time).
   // Eastern time is -04:00 until Nov 1, 2026, and -05:00 after that.
-  opensAt: '2026-10-23T08:00:00-04:00',
+  opensAt: '2026-10-22T08:00:00-04:00',
   closesAt: '2026-10-30T16:30:00-04:00',
 
   // Your rule: how much each new bid must beat the top bid on an activity by, in dollars.
