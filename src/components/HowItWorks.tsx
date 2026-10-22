@@ -49,7 +49,7 @@ export function HowItWorks() {
             <li>If two people bid the same amount, whoever bid first keeps the lead.</li>
             <li>
               {closeLabel
-                ? `Bidding closes ${closeLabel}. After that, the bid form stops taking bids.`
+                ? `${sentence(`Bidding closes ${closeLabel}`)} After that, the bid form stops taking bids.`
                 : 'When bidding closes, the bid form stops taking bids.'}
             </li>
             <li>Bid on as many activities as you like, as many times as you like.</li>
