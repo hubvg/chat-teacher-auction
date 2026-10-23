@@ -5,7 +5,7 @@ export interface Activity {
   lot: number;
   /** The activity's name, shown exactly as written. */
   name: string;
-  /** Optional: lowest first bid, in dollars. Without it, the first bid must be at least minIncrement. */
+  /** Optional: this activity's lowest first bid, in dollars, instead of config.startingBid. */
   startingBid?: number;
 }
 
@@ -43,6 +43,8 @@ export interface AuctionConfig {
   opensAt: string;
   /** When bidding closes. */
   closesAt: string;
+  /** The lowest first bid on every activity, in dollars. An activity can set its own startingBid instead. */
+  startingBid: number;
   /** Each new bid must beat the top bid on that activity by at least this many dollars. */
   minIncrement: number;
   /** Bids above this many dollars are refused as typos. */

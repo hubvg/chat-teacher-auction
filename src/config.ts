@@ -15,7 +15,7 @@ export const config: AuctionConfig = {
   title: 'Teacher Auction',
   schoolName: 'TanenbaumCHAT',
   schoolNickname: 'CHAT', // Shown where space is tight, like the top bar on phones.
-  tagline: 'Bid on an activity with a CHAT teacher. The money raised goes to Rethink Breast Cancer through our Think Pink fundraiser.',
+  tagline: 'Bid on an activity with a CHAT teacher, as an individual or as a group. The money raised goes to Rethink Breast Cancer through our Think Pink fundraiser.',
   fundraiser: {
     name: 'Think Pink',
     cause: 'breast cancer awareness',
@@ -32,8 +32,10 @@ export const config: AuctionConfig = {
   // Format: 2026-10-30T15:00:00-04:00 (that's Oct 30 at 3 p.m. Eastern daylight time).
   // Eastern time is -04:00 until Nov 1, 2026, and -05:00 after that.
   opensAt: '2026-10-23T08:00:00-04:00',
-  closesAt: '2026-10-30T16:30:00-04:00',
+  closesAt: '2026-10-29T16:30:00-04:00',
 
+  // The lowest first bid on every activity, in dollars.
+  startingBid: 25,
   // Your rule: how much each new bid must beat the top bid on an activity by, in dollars.
   minIncrement: 1,
   // Bids above this many dollars are refused as typos.
@@ -51,8 +53,9 @@ export const config: AuctionConfig = {
  * The activities up for auction, named exactly as written.
  *
  * Each number must be unique. Bids are saved by number, so once bidding starts,
- * don't renumber; add new activities at the end. To set a minimum first bid for
- * an activity, add startingBid with the amount in dollars, like:
+ * don't renumber; add new activities at the end. Every activity starts at
+ * config.startingBid. To give one activity a different starting bid, add
+ * startingBid with the amount in dollars, like:
  *   { lot: 1, name: '...', startingBid: <amount> },
  */
 export const activities: Activity[] = [

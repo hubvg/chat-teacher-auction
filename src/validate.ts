@@ -44,6 +44,8 @@ export function validateConfig(): ConfigReport {
   }
 
   if (!(config.minIncrement > 0)) errors.push('config.minIncrement must be more than 0.');
+  if (!(config.startingBid > 0)) errors.push('config.startingBid must be more than 0.');
+  if (config.startingBid > config.maxBid) errors.push('config.startingBid can’t be more than config.maxBid.');
   if (!(config.maxBid >= config.minIncrement)) errors.push('config.maxBid must be at least config.minIncrement.');
   if (!['first-initial', 'full', 'number'].includes(config.nameStyle)) {
     errors.push("config.nameStyle must be 'first-initial', 'full' or 'number'.");
@@ -66,6 +68,7 @@ export function validateConfig(): ConfigReport {
     seen.add(a.lot);
     if (!a.name?.trim()) errors.push(`${where}: the name is empty.`);
     if (a.startingBid !== undefined && !(a.startingBid > 0)) errors.push(`${where}: startingBid must be more than 0.`);
+    if (a.startingBid !== undefined && a.startingBid > config.maxBid) errors.push(`${where}: startingBid can’t be more than config.maxBid.`);
   });
 
   if (!opens && !closes) {

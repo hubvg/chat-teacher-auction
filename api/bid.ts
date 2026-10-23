@@ -104,6 +104,8 @@ export async function POST(request: Request): Promise<Response> {
   const amount = parseAmount(body.amount);
   if (amount === null) return invalid('amount', 'Enter an amount, like 45.');
   if (amount > config.maxBid) return invalid('amount', `Bids over ${money(config.maxBid)} aren’t accepted.`);
+  const startingBid = activity.startingBid ?? config.startingBid;
+  if (amount + 1e-9 < startingBid) return invalid('amount', `Bids on this activity start at ${money(startingBid)}.`);
   const nameError = nameProblem(body.name);
   if (nameError) return invalid('name', nameError);
   const emailError = emailProblem(body.email);
@@ -125,7 +127,7 @@ export async function POST(request: Request): Promise<Response> {
       .slice(0, NAME_MAX),
     email: String(body.email).trim().toLowerCase(),
     minIncrement: config.minIncrement,
-    startingBid: activity.startingBid ?? null,
+    startingBid,
     opensAt,
     closesAt,
     nameStyle: config.nameStyle,

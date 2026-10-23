@@ -21,7 +21,14 @@ export const rules: Rules = {
   opensAt: schedule.opensAt ?? Number.POSITIVE_INFINITY,
   closesAt: schedule.closesAt ?? Number.NEGATIVE_INFINITY,
   minIncrement: config.minIncrement,
+  startingBid: config.startingBid,
 };
+
+/** The starting bid when every activity has the same one (usually), otherwise null. */
+export const uniformStartingBid: number | null = (() => {
+  const starts = new Set(activities.map((a) => a.startingBid ?? config.startingBid));
+  return starts.size === 1 ? [...starts][0]! : null;
+})();
 
 export const closeLabel = config.closesAt.trim() ? longDateTime(config.closesAt) : null;
 export const openLabel = config.opensAt.trim() ? longDateTime(config.opensAt) : null;

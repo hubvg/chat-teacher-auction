@@ -99,3 +99,17 @@ test('activities keep config order', () => {
     [1, 2, 3],
   );
 });
+
+test('the config starting bid applies unless an activity sets its own', () => {
+  const withStart: Rules = { ...rules, startingBid: 25 };
+  assert.deepEqual(
+    computeAuction(activities, [], withStart).lots.map((l) => [l.activity.lot, l.nextMin]),
+    [
+      [1, 10],
+      [2, 25],
+      [3, 5],
+    ],
+  );
+  const s = computeAuction(activities, [bid(2, 20, 'Under Start'), bid(2, 25, 'At Start')], withStart);
+  assert.equal(s.lots[1]!.top?.name, 'At Start', 'a bid under the starting bid never counts');
+});

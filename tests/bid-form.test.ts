@@ -1,7 +1,9 @@
 // Test inputs only. Nothing in this file is shown on the site.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { activities } from '../src/config';
+import { activities, config } from '../src/config';
+import { computeAuction } from '../src/lib/auction';
+import { rules } from '../src/site';
 import { emailProblem, nameProblem, parseAmount } from '../src/lib/bidForm';
 import { boardName, shortName } from '../src/lib/names';
 import { mergeBids, pruneLocal } from '../src/lib/sanitize';
@@ -23,6 +25,12 @@ test('names and emails', () => {
   assert.notEqual(nameProblem(''), '');
   assert.notEqual(nameProblem('12345'), '');
   assert.notEqual(nameProblem('x'.repeat(41)), '');
+  for (const single of ['Alexander Anderson', "Mary-Kate O'Neil", 'Sandra Andrews', 'Zoë']) {
+    assert.equal(nameProblem(single), '', single);
+  }
+  for (const group of ['Maya, Kai', 'Maya & Kai', 'Maya and Kai Test', 'Maya + Kai', 'Maya/Kai']) {
+    assert.match(nameProblem(group), /one person/, group);
+  }
   assert.equal(emailProblem('maya@school.test'), '');
   assert.notEqual(emailProblem('maya@school'), '');
   assert.notEqual(emailProblem(''), '');
@@ -46,6 +54,24 @@ test('a just-placed bid shows until the server sends it back', () => {
   assert.deepEqual(pruneLocal([mine], [...server, { ...mine, t: 2001 }], 3000), [], 'the server has it now');
   assert.deepEqual(pruneLocal([mine], server, 2000 + 120_001), [], 'given up after two minutes');
   assert.equal(mergeBids(server, []), server);
+});
+
+test('every activity starts at the starting bid in the config', () => {
+  assert.equal(config.startingBid, 25);
+  const { lots } = computeAuction(activities, [], rules);
+  assert.ok(lots.every((l) => l.nextMin === 25), 'all 41 open at $25');
+  const t = rules.opensAt + 1000;
+  const after = computeAuction(
+    activities,
+    [
+      { lot: 2, amount: 24, name: 'Too Low', k: 'a', t },
+      { lot: 2, amount: 25, name: 'First Bid', k: 'b', t: t + 1 },
+    ],
+    rules,
+  );
+  const two = after.lots.find((l) => l.activity.lot === 2)!;
+  assert.equal(two.top?.name, 'First Bid', 'a $24 bid never counts');
+  assert.equal(two.nextMin, 26, 'then $1 steps');
 });
 
 test('the activity list is numbered 1 to 41 with no gaps or repeats', () => {

@@ -26,7 +26,7 @@ You need a Google account, a free GitHub account and a free Vercel account (sign
 
 ### 1. Fill in `src/config.ts`
 
-The 41 activities are already in, named exactly as given and numbered 1 to 41. Bids are saved by number, so once bidding starts, don't renumber them; add new activities at the end with the next number. To give an activity a minimum first bid, add `startingBid` with the amount.
+The 41 activities are already in, named exactly as given and numbered 1 to 41. Bids are saved by number, so once bidding starts, don't renumber them; add new activities at the end with the next number. Every activity starts at `startingBid` (below); to give one activity a different starting bid, add `startingBid` to that activity.
 
 The rest of the config starts with only what's been decided: the title, the school (TanenbaumCHAT, nicknamed CHAT) and its logos, the fundraiser (Think Pink, raising money for Rethink Breast Cancer) and a one-line description. Fill in the rest as you decide it:
 
@@ -41,8 +41,9 @@ The rest of the config starts with only what's been decided: the title, the scho
 
 Dates look like `2026-10-30T15:00:00-04:00`. The `-04:00` is Eastern daylight time; after November 1, 2026 use `-05:00`.
 
-Three rules are already set; change them to whatever your organizers decide:
+Four rules are already set; change them to whatever your organizers decide:
 
+- `startingBid`: the lowest first bid on every activity. Set to $25.
 - `minIncrement`: how much each new bid must beat the top bid on an activity by. Set to $1.
 - `maxBid`: bids above this are refused as typos. Set to $5,000.
 - `nameStyle`: how names appear on the board. `'first-initial'` shows "Shawn A.", `'full'` shows the full name as typed, `'number'` shows "Bidder 7" and no names at all.
@@ -79,7 +80,8 @@ Bids are refused before `opensAt`, so test bids can't sneak into the real auctio
 
 ## How bidding works
 
-- **Placing a bid:** tap **Bid** on an activity. The smallest bid that counts is already filled in; bidders can raise it. They enter their name and email and press **Place bid**. The form checks everything as they go and says exactly what to fix.
+- **Placing a bid:** tap **Bid** on an activity. The smallest bid that counts is already filled in ($25 for the first bid on an activity); bidders can raise it. They enter their name and email and press **Place bid**. The form checks everything as they go and says exactly what to fix.
+- **Bidding as a group:** people can bid as an individual or as a group. For a group, one person places the bid using their own name and email, so the board shows that person. The form asks for one name, because "Maya, Kai & Zoe" would show on the board as "Maya Z.". If a group wins, the organizers ask who's in it.
 - **If someone got there first:** the form says "Someone just bid $X" and fills in the new minimum, so they can try again in one tap.
 - **After bidding:** their bid shows on their screen at once. Everyone else sees it within about 15 seconds. If someone outbids them, the other person's name replaces theirs.
 - **The next bid is quicker:** the bidder's name and email are remembered on that phone or computer (and nowhere else).
@@ -92,7 +94,7 @@ Bids are refused before `opensAt`, so test bids can't sneak into the real auctio
 - **The Bids tab** has one row per accepted bid: when it arrived, name, email, activity number and name, and amount. Bids that were too low are never saved.
 - **Removing a joke or fake bid:** type `x` in its Void column. It disappears from the board, and the next highest valid bid takes over automatically.
 - **Adding a bid by hand** (one told to you in person): fill in a new row's Name, `#` and Amount. The time fills itself in. Like any bid, it counts only if it beats the top bid at that moment by `minIncrement`.
-- **What counts:** bids are replayed in the order they arrived. A bid counts only if it beats the top bid on that activity by at least `minIncrement` (or meets the starting bid). If two bids are equal, the earlier one keeps the lead. Bids are refused after `closesAt`.
+- **What counts:** bids are replayed in the order they arrived. The first bid on an activity must be at least `startingBid`, and every bid after that must beat the top bid by at least `minIncrement`. If two bids are equal, the earlier one keeps the lead. Bids are refused after `closesAt`.
 - **Contacting winners:** after closing, the board shows the winning bid and winner on every activity. Find the row in the sheet with that activity number and amount for their email.
 - **"Pledged so far":** the sum of the current top bids. It's what the auction raises if every winner pays, which is why the site doesn't call it money raised.
 - **Changing `nameStyle` mid-auction:** the board switches with the next bid after the site redeploys (the script learns the style from each bid).

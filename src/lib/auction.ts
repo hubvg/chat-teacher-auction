@@ -7,6 +7,8 @@ export interface Rules {
   closesAt: number;
   /** How much each new bid must beat the top bid on an activity by, in dollars. */
   minIncrement: number;
+  /** The lowest first bid on an activity that doesn't set its own startingBid. Defaults to minIncrement. */
+  startingBid?: number;
 }
 
 export interface AcceptedBid {
@@ -44,7 +46,7 @@ const roundCents = (n: number) => Math.round(n * 100) / 100;
 
 /** The smallest bid that counts: the starting bid (or one step) before anyone bids, then the top bid plus one step. */
 export function minimumBid(activity: Activity, top: AcceptedBid | null, rules: Rules): number {
-  if (!top) return activity.startingBid ?? rules.minIncrement;
+  if (!top) return activity.startingBid ?? rules.startingBid ?? rules.minIncrement;
   return roundCents(top.amount + rules.minIncrement);
 }
 

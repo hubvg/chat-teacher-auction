@@ -2,7 +2,17 @@
 // structured data, robots.txt, sitemap.xml, llms.txt, the web manifest and the
 // activity list the Apps Script reads. All of it is generated from config.ts at build time.
 import { money, sentence } from './lib/format';
-import { activities, charity, closeLabel, config, fundraiserPhrase, openLabel, shortSiteName, siteName } from './site';
+import {
+  activities,
+  charity,
+  closeLabel,
+  config,
+  fundraiserPhrase,
+  openLabel,
+  shortSiteName,
+  siteName,
+  uniformStartingBid,
+} from './site';
 
 export type PageKind = 'home' | 'notFound';
 
@@ -156,7 +166,10 @@ export function llmsTxt(siteUrl: string): string {
     'Bids are placed on the site itself: pick an activity, press Bid, and enter an amount, name and email.',
     'The site shows the top bid and who has it on every activity, and checks for new bids every 10 seconds.',
     openLabel && closeLabel ? sentence(`Bidding opens ${openLabel} and closes ${closeLabel}`) : 'Bidding dates have not been announced yet.',
-    `Each new bid must beat the top bid on its activity by at least ${money(config.minIncrement)}.`,
+    'Bid as an individual or as a group. For a group, one person places the bid in their own name.',
+    uniformStartingBid !== null
+      ? `Bids start at ${money(uniformStartingBid)}. After that, each new bid must beat the top bid on its activity by at least ${money(config.minIncrement)}.`
+      : `Each activity has its own starting bid. After the first bid, each new bid must beat the top bid by at least ${money(config.minIncrement)}.`,
     config.payment.trim() ? sentence(config.payment.trim()) : '',
   ];
   const lines: string[] = [
@@ -169,7 +182,7 @@ export function llmsTxt(siteUrl: string): string {
     '## Activities',
     '',
     ...activities.map((a) => {
-      const start = a.startingBid !== undefined ? ` Starting bid ${money(a.startingBid)}.` : '';
+      const start = uniformStartingBid === null ? ` Starting bid ${money(a.startingBid ?? config.startingBid)}.` : '';
       return `- [#${a.lot} ${a.name.replace(/\s+/g, ' ').trim()}](${siteUrl}/#lot-${a.lot})${start}`;
     }),
     '',

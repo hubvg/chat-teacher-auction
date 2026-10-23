@@ -1,5 +1,5 @@
 import { money, sentence, typo } from '../lib/format';
-import { closeLabel, config } from '../site';
+import { closeLabel, config, uniformStartingBid } from '../site';
 
 export function HowItWorks() {
   const payment = config.payment.trim();
@@ -43,8 +43,13 @@ export function HowItWorks() {
           </h2>
           <ul className="rules" aria-labelledby="rules-title">
             <li>
-              A bid counts only if it beats the top bid on that activity by at least {money(config.minIncrement)}. The
-              first bid on an activity must be at least its starting bid.
+              Bid as an individual or as a group. For a group, one person places the bid using their own name and
+              email. If you win, tell the organizers who’s in your group.
+            </li>
+            <li>
+              {uniformStartingBid !== null
+                ? `Bids start at ${money(uniformStartingBid)}. After that, each new bid must beat the top bid on that activity by at least ${money(config.minIncrement)}.`
+                : `Each activity shows its starting bid. After the first bid, each new bid must beat the top bid by at least ${money(config.minIncrement)}.`}
             </li>
             <li>If two people bid the same amount, whoever bid first keeps the lead.</li>
             <li>

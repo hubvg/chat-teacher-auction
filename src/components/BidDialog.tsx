@@ -304,7 +304,7 @@ export function BidDialog({ lot, phase, onClose, onPlaced }: Props) {
                   {shown('name') ||
                     (boardName(name, config.nameStyle)
                       ? `Shown on the board as ${boardName(name, config.nameStyle)}`
-                      : 'Use your real name.')}
+                      : 'Use your real name. For a group, use one person’s name.')}
                 </p>
               </div>
 

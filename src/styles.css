@@ -933,31 +933,21 @@ body::before {
   font-variant-numeric: tabular-nums;
 }
 
-/* Phones: label, amount and leader on one line. Wider screens: the label sits on top. */
+/* The label sits on top, so the amount and who has it get the full width, even on phones. */
 .act__price {
   grid-area: price;
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: baseline;
-  column-gap: 8px;
+  column-gap: 10px;
   min-width: 0;
 }
 
 .act__label {
+  grid-column: 1 / -1;
   font-size: 0.75rem;
   font-weight: 650;
   color: var(--muted);
-}
-
-@media (min-width: 760px) {
-  .act__price {
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: 10px;
-  }
-
-  .act__label {
-    grid-column: 1 / -1;
-  }
 }
 
 .act__amount {
@@ -974,13 +964,12 @@ body::before {
   color: var(--line-strong);
 }
 
+/* Wraps rather than cuts off: who has the top bid is the point of the row. */
 .act__leader {
   min-width: 0;
   font-size: 0.875rem;
   font-weight: 650;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .act__action {

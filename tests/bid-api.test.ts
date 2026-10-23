@@ -59,6 +59,7 @@ test('a good bid is passed to the Apps Script with the secret and the rules', as
   assert.equal(sent[0]!.secret, 'test-secret');
   assert.equal(sent[0]!.activity, 'Pizza-making with Mr. Fabrizi');
   assert.equal(sent[0]!.minIncrement, config.minIncrement);
+  assert.equal(sent[0]!.startingBid, config.startingBid, 'the Apps Script enforces the starting bid too');
   assert.equal(sent[0]!.opensAt, Date.parse(opens));
   assert.equal(sent[0]!.email, 'maya@school.test');
 });
@@ -69,6 +70,8 @@ test('bad input is refused before it reaches the Apps Script, with the field to 
     [{ ...good, amount: 'lots' }, 'amount'],
     [{ ...good, amount: '-5' }, 'amount'],
     [{ ...good, amount: String(config.maxBid + 1) }, 'amount'],
+    [{ ...good, amount: String(config.startingBid - 1) }, 'amount'],
+    [{ ...good, name: 'Maya Test & Kai Test' }, 'name'],
     [{ ...good, name: '   ' }, 'name'],
     [{ ...good, name: '12345' }, 'name'],
     [{ ...good, email: 'not-an-email' }, 'email'],

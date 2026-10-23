@@ -20,6 +20,8 @@ export function nameProblem(name: unknown): string {
   const trimmed = String(name ?? '').trim();
   if (!trimmed || !/\p{L}/u.test(trimmed)) return 'Enter your name.';
   if (trimmed.length > NAME_MAX) return `Use ${NAME_MAX} characters or fewer.`;
+  // Several names would show on the board as one odd name ("Maya, Kai & Zoe" becomes "Maya Z.").
+  if (/[,&+/;]|\s(?:and|plus)\s/i.test(trimmed)) return 'Enter one person’s name. For a group, use the person placing the bid.';
   return '';
 }
 
